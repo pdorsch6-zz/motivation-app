@@ -9,3 +9,5 @@ const QuoteCategory = new Schema(
     }
   }
 );
+
+module.exports = mongoose.model("QuoteCategory", QuoteCategory);
