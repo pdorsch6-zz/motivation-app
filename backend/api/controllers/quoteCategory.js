@@ -1,4 +1,3 @@
-const Quote = require('mongoose').model('Quote');
 const Category = require('mongoose').model('QuoteCategory');
 
 module.exports.getAll = (req, res) => {
@@ -20,9 +19,9 @@ module.exports.getAll = (req, res) => {
 
 module.exports.create = (req, res) => {
     Category.find({
-        category: new RegExp(`^${req.body.category}$`, 'i')
+        category: `/${req.body.category}/i`
     }).then(category => {
-        if(!category) {
+        if(category.length === 0) {
             new Category({
                 category: req.body.category
             })
