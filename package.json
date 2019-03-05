@@ -1,23 +1,16 @@
 {
-  "name": "motivation-app",
+  "name": "full-motivation-app",
   "version": "1.0.0",
-  "description": "This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).",
+  "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/pdorsch6/motivation-app.git"
+    "start": "concurrently \"cd backend && node server.js\" \"cd frontend && npm start\""
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/pdorsch6/motivation-app/issues"
-  },
-  "homepage": "https://github.com/pdorsch6/motivation-app#readme",
   "dependencies": {
-    "concurrently": "^4.1.0"
+    "concurrently": "^4.0.1",
+    "cors": "^2.8.5"
   }
 }

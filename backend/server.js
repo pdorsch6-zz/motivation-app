@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const express = require("express");
+const cors = require("cors");
 const bodyParser = require("body-parser");
 const logger = require("morgan");
 const Data = require("./data");
@@ -8,8 +9,10 @@ const API_PORT = 3001;
 const app = express();
 const router = express.Router();
 
+app.use(cors());
+
 // this is our MongoDB database
-const dbRoute = "mongodb://pdorsch6:hzAOJZF0eNNfKASW@motivationcluster-shard-00-00-3p32s.mongodb.net:27017,motivationcluster-shard-00-01-3p32s.mongodb.net:27017,motivationcluster-shard-00-02-3p32s.mongodb.net:27017/test?ssl=true&replicaSet=MotivationCluster-shard-0&authSource=admin&retryWrites=true";
+const dbRoute = "mongodb+srv://pdorsch6:hzAOJZF0eNNfKASW@motivationcluster-3p32s.mongodb.net/test?retryWrites=true";
 
 // connects our back end code with the database
 mongoose.connect(
