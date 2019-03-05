@@ -5,7 +5,7 @@ module.exports.getAll = (req, res) => {
         .then(categories => {
             return res.status(200).json({
                 status: 'ok',
-                categories: categories ? categories : [], // Ensure we always at the bare minimum send back an empty array
+                categories: categories ? categories : [],
             });
         })
         .catch(err => {
@@ -19,11 +19,11 @@ module.exports.getAll = (req, res) => {
 
 module.exports.create = (req, res) => {
     Category.find({
-        category: `/${req.body.category}/i`
+        "category": req.body.category.toLowerCase()
     }).then(category => {
         if(category.length === 0) {
             new Category({
-                category: req.body.category
+                category: req.body.category.toLowerCase()
             })
             .save()
             .then(category => {
@@ -51,4 +51,58 @@ module.exports.create = (req, res) => {
             message: 'An unexpected internal server error has occurred',
         });
     });
+};
+
+module.exports.deleteOne = (req, res) => {
+    Category.findByIdAndDelete(req.params.id)
+        .then(category => {
+            if (!category) {
+                return res.status(404).json({
+                    status: 'error',
+                    message: 'Category not found'
+                });
+            }
+
+            return res.status(200).json({
+                status: 'ok',
+            });
+        })
+        .catch(err => {
+            return res.status(500).json({
+                status: 'error',
+                error: err,
+                message: 'An unexpected internal server error has occurred!',
+            });
+        });
+};
+
+module.exports.update = (req, res) => {
+    Category.findById(req.params.id)
+        .then(async category => {
+            if (!category) {
+                return res.status(404).json({
+                    status: 'error',
+                    message: 'Category not found',
+                });
+            }
+
+            category.category = req.body.category.toLowerCase()
+                ? req.body.category.toLowerCase()
+                : category.category;
+
+            const updated = await category.save();
+
+            return res.status(200).json({
+                status: 'ok',
+                category: updated,
+            });
+        })
+        .catch(err => {
+            console.log(err);
+            return res.status(500).json({
+                status: 'error',
+                error: err,
+                message: 'An unexpected internal server error has occurred!',
+            });
+        });
 };
