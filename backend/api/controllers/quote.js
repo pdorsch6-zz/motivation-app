@@ -1,12 +1,14 @@
 const Quote = require('mongoose').model('Quote');
 const Category = require('mongoose').model('QuoteCategory');
+const Author = require('mongoose').model('Author');
 
 module.exports.getAll = (req, res) => {
     Quote.find({})
+        .populate(['category', 'author'])
         .then(quote => {
             return res.status(200).json({
                 status: 'ok',
-                quote: quote ? quote : [], // Ensure we always at the bare minimum send back an empty array
+                quote: quote ? quote : [],
             });
         })
         .catch(err => {
@@ -98,6 +100,16 @@ module.exports.update = (req, res) => {
                 }
             }
 
+            if (req.body.author) {
+                const author = await Author.findById(req.body.author);
+                if (!author) {
+                    return res.status(404).json({
+                        status: 'error',
+                        message: 'Unable to find author',
+                    });
+                }
+            }
+
             quote.category = req.body.category
                 ? req.body.category
                 : quote.category;
@@ -105,6 +117,10 @@ module.exports.update = (req, res) => {
             quote.quote = req.body.quote
                 ? req.body.quote
                 : quote.quote;
+
+            quote.author = req.body.author
+                ? req.body.author
+                : quote.author;
 
             quote.date_added = req.body.date_added
                 ? req.body.date_added

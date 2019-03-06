@@ -19,7 +19,6 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 const dbRoute = `mongodb+srv://${MONGO_USER}:${MONGO_PASS}@motivationcluster-3p32s.mongodb.net/test?retryWrites=true`;
-console.log(dbRoute);
 mongoose.connect(
   dbRoute,
   { useNewUrlParser: true }
@@ -33,12 +32,15 @@ db.on("error", console.error.bind(console, "MongoDB connection error:"));
 
 require('./api/models/Quote');
 require('./api/models/QuoteCategory');
+require('./api/models/Author')
 
 const quoteRouter = require("./api/routes/quote");
 const categoryRouter = require("./api/routes/quoteCategory");
+const authorRouter = require("./api/routes/author");
 
 app.use('/api/quote', quoteRouter);
 app.use('/api/category', categoryRouter);
+app.use('/api/author', authorRouter);
 
 // launch our backend into a port
 app.listen(API_PORT, () => console.log(`LISTENING ON PORT ${API_PORT}`));
