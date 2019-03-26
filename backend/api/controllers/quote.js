@@ -5,10 +5,10 @@ const Author = require('mongoose').model('Author');
 module.exports.getAll = (req, res) => {
     Quote.find({})
         .populate(['category', 'author'])
-        .then(quote => {
+        .then(quotes => {
             return res.status(200).json({
                 status: 'ok',
-                quote: quote ? quote : [],
+                quotes: quotes ? quotes : [],
             });
         })
         .catch(err => {
