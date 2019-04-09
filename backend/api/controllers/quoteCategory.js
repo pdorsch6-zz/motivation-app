@@ -41,7 +41,8 @@ module.exports.create = (req, res) => {
         } else {
             return res.status(400).json({
                 status: 'error',
-                message: 'That category already exists in this database'
+                message: 'That category already exists in this database',
+                category: category[0]
             });
         }
     }).catch(err => {

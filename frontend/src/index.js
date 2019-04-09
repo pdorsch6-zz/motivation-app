@@ -4,12 +4,15 @@ import { BrowserRouter as Router, Route } from 'react-router-dom';
 import * as serviceWorker from './serviceWorker';
 import { Provider } from 'react-redux';
 import store from './store/store';
-import QuoteList from './components/QuoteList';
+import Quotes from './components/Quotes';
+
+// const REACT_APP_DB_HOST = process.env.REACT_APP_DB_HOST;
+// console.log(REACT_APP_DB_HOST);
 
 ReactDOM.render(
   <Provider store={store}>
   <Router>
-    <Route path="/" exact component={QuoteList} />
+    <Route path="/" exact component={Quotes} />
   </Router>
   </Provider>
 , document.getElementById('root'));

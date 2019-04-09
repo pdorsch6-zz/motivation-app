@@ -7,7 +7,6 @@ const path = require('path');
 
 require('dotenv').config({ path: path.join(__dirname, '../.env') });
 
-
 const API_PORT = process.env.PORT || 3000;
 const MONGO_USER = process.env.MONGODB_USER;
 const MONGO_PASS = process.env.MONGODB_PASS;

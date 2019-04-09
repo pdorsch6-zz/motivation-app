@@ -21,32 +21,16 @@ module.exports.getAll = (req, res) => {
 };
 
 module.exports.create = (req, res) => {
-    Category.findById(req.body.category)
-        .then(category => {
-            if(!category) {
-                return res.status(404).json({
-                    status: 'error',
-                    message: 'Category not found'
-                });
-            }
-
-            new Quote({
-                quote: req.body.quote,
-                category: category._id
-            })
-            .save()
-            .then(quote => {
-                return res.status(200).json({
-                    status: 'ok',
-                    quote: quote
-                });
-            })
-            .catch(err => {
-                return res.status(500).json({
-                    status: 'error',
-                    error: err,
-                    message: 'An unexpected error occured.'
-                });
+    new Quote({
+        quote: req.body.quote,
+        author: req.body.author,
+        category: req.body.category
+    })
+        .save()
+        .then(quote => {
+            return res.status(200).json({
+                status: 'ok',
+                quote: quote,
             });
         })
         .catch(err => {

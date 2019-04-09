@@ -42,7 +42,8 @@ module.exports.create = (req, res) => {
         } else {
             return res.status(400).json({
                 status: 'error',
-                message: 'That author already exists in this database'
+                message: 'That author already exists in this database',
+                author: author[0]
             });
         }
     }).catch(err => {
