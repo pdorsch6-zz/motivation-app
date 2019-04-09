@@ -4,12 +4,27 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as actions from '../actions';
 
+import { withStyles } from '@material-ui/core/styles';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import DialogActions from '@material-ui/core/DialogActions';
 import Dialog from '@material-ui/core/Dialog';
 import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
+import Snackbar from '@material-ui/core/Snackbar';
+import CustomSnackbar from './CustomSnackbar';
 
 const REACT_APP_DB_HOST = process.env.REACT_APP_DB_HOST;
-console.log(REACT_APP_DB_HOST);
+
+const styles = theme => ({
+  container: {
+    display: 'flex',
+    flexWrap: 'wrap',
+  },
+  textField: {
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit,
+  },
+});
 
 class AddQuote extends Component {
 
@@ -20,10 +35,16 @@ class AddQuote extends Component {
 			quote: '',
 			author: '',
       category: '',
-      open: false
+      open: false,
+      snackbarOpen: false,
+      snackbarStyle: 'success',
+      snackbarMessage: ''
 		};
         this.addQuote = this.addQuote.bind(this);
         this.onFieldChange = this.onFieldChange.bind(this);
+        this.closeSnackbar = this.closeSnackbar.bind(this);
+        this.openSnackbar = this.openSnackbar.bind(this);
+        this.handleClickClose = this.handleClickClose.bind(this);
     }
     
     handleClickOpen = () => {
@@ -42,8 +63,20 @@ class AddQuote extends Component {
       this.setState({ [name]: e });
     }
 
+    closeSnackbar = () => {
+      this.setState({ snackbarOpen: false });
+    };
+
+    openSnackbar = (variant, message) => {
+      this.setState({ snackbarOpen: true, snackbarStyle: variant, snackbarMessage: message });
+    };
+
+    
+
     async addQuote() {
         let { quote, author, category } = this.state;
+
+        this.handleClickClose();
 
         try {
             let authorResponse = await fetch(`${REACT_APP_DB_HOST}/api/author`, {
@@ -85,20 +118,22 @@ class AddQuote extends Component {
                     })
                 });
                 if (quoteResponse.status === 200) {
-                    let quoteJson = await quoteResponse.json();
-                    console.log("Quote added: \"" + quoteJson.quote + "\"");
+                    this.openSnackbar('success', "Quote added!" );
                 }
             }
         } catch (e) {
-            console.log("ERROR: ", e);
+          this.openSnackbar('error', "Error: " + e );
         }
         
     }
 
     render() {
+        const { classes } = this.props;
+        const { snackbarMessage, snackbarStyle, snackbarOpen } = this.state;
+        console.log(this.state);
         return (
         <div>
-          <Button variant="outlined" color="primary" onClick={this.handleClickOpen}>
+          <Button variant="contained" color="primary" onClick={this.handleClickOpen}>
             Add Quote
           </Button>
           <Dialog open={this.state.open} onClose={this.handleClickClose} aria-labelledby="simple-dialog-title">
@@ -107,7 +142,10 @@ class AddQuote extends Component {
               <TextField
                 label="Category"
                 onChange={e => this.onFieldChange('category',  e.target.value)}
+                className={classes.textField}
                 margin="normal"
+                fullWidth
+                variant="outlined"
               />
 
               <TextField
@@ -115,46 +153,45 @@ class AddQuote extends Component {
                 label="Quote"
                 multiline
                 onChange={e => this.onFieldChange('quote',  e.target.value)}
+                className={classes.textField}
                 margin="normal"
+                variant="outlined"
+                fullWidth
               />
 
               <TextField
                 label="Author"
                 onChange={e => this.onFieldChange('author',  e.target.value)}
+                className={classes.textField}
                 margin="normal"
+                variant="outlined"
+                fullWidth
               />
             </form>
-            {/* <div>
-              Category:
-                <input
-                  type="text"
-                  onChange={e => this.onFieldChange('category',  e.target.value)}
-                  placeholder="Category"
-                  style={{ width: "200px" }}
-                />
-                <br />
-                Quote: 
-                <input
-                  type="text"
-                  onChange={e => this.onFieldChange('quote',  e.target.value)}
-                  placeholder="Quote"
-                  style={{ width: "200px" }}
-                />
-                <br />
-                Author:
-                <input
-                  type="text"
-                  onChange={e => this.onFieldChange('author',  e.target.value)}
-                  placeholder="Author"
-                  style={{ width: "200px" }}
-                />
-                <br />
-                <button onClick={this.addQuote}>
-                  ADD
-                </button>
-            </div> */}
-            <Button onClick={this.addQuote} />
+            <DialogActions>
+              <Button onClick={this.handleClickClose} color="secondary" variant="contained">
+                Cancel
+              </Button>
+              <Button onClick={this.addQuote} color="primary" variant="contained">
+                Submit
+              </Button>
+            </DialogActions>
           </Dialog>
+          <Snackbar
+            anchorOrigin={{
+              vertical: 'top',
+              horizontal: 'center',
+            }}
+            open={snackbarOpen}
+            autoHideDuration={6000}
+            onClose={this.closeSnackbar}
+            >
+              <CustomSnackbar
+                onClose={this.closeSnackbar}
+                variant={snackbarStyle}
+                message={snackbarMessage}
+              />
+            </Snackbar>
         </div>
         );
     }
@@ -176,5 +213,5 @@ export default withRouter(
 	connect(
 		mapStateToProps,
 		mapDispatchToProps
-	)(AddQuote)
+	)(withStyles(styles)(AddQuote))
 );
