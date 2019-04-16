@@ -32,17 +32,18 @@ class Quotes extends Component {
       }
       return (
         <>
-          <ul>
+          <div>
+            <AddQuote />
+          </div>
+          <br />
+          <div>
             {quotes ?
               <QuoteTable />
               // quotes.map((quote, index) => <li key={index}> {quote.quote}  </li> )
               : <p>Loading...</p>
             }
-          </ul>
-          <br />
-          <div>
-            <AddQuote />
           </div>
+          <br />
         </>
       );
     }

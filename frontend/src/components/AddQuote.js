@@ -71,6 +71,11 @@ class AddQuote extends Component {
       this.setState({ snackbarOpen: true, snackbarStyle: variant, snackbarMessage: message });
     };
 
+    updateQuotes = () => {
+      const { loadQuotes } = this.props.quotesActions; 
+      loadQuotes();
+    }
+
     
 
     async addQuote() {
@@ -118,7 +123,8 @@ class AddQuote extends Component {
                     })
                 });
                 if (quoteResponse.status === 200) {
-                    this.openSnackbar('success', "Quote added!" );
+                  this.updateQuotes();
+                  this.openSnackbar('success', "Quote added!" );
                 }
             }
         } catch (e) {
@@ -130,7 +136,6 @@ class AddQuote extends Component {
     render() {
         const { classes } = this.props;
         const { snackbarMessage, snackbarStyle, snackbarOpen } = this.state;
-        console.log(this.state);
         return (
         <div>
           <Button variant="contained" color="primary" onClick={this.handleClickOpen}>
@@ -206,7 +211,10 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => {
-	return bindActionCreators({ ...actions.quote }, dispatch);
+	return { 
+    quotesActions: bindActionCreators({ ...actions.quotes }, dispatch),
+    quoteActions: bindActionCreators({ ...actions.quote }, dispatch),
+  }
 };
 
 export default withRouter(
