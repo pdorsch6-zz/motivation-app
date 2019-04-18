@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
 
 importScripts(
-  "/pdorsch6/motivation-app/precache-manifest.21d94ce876a03b66ae894f667731f43e.js"
+  "/pdorsch6/motivation-app/precache-manifest.157b359c7d7fb679dc2c4907d4f648d8.js"
 );
 
 workbox.clientsClaim();

@@ -13,9 +13,9 @@ const MONGO_PASS = process.env.MONGODB_PASS;
 const app = express();
 
 app.use(cors());
-app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.static(path.join(__dirname, '../frontend/build')));
 
 const dbRoute = `mongodb+srv://${MONGO_USER}:${MONGO_PASS}@motivationcluster-3p32s.mongodb.net/test?retryWrites=true`;
 mongoose.connect(

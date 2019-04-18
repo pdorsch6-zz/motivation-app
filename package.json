@@ -4,9 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "build": "react-scripts build",
     "backend": "nodemon backend/server.js",
     "frontend": "cd frontend && npm run watch",
-    "start": "concurrently \"npm run backend\" \"npm run frontend\""
+    "dev": "concurrently \"npm run backend\" \"npm run frontend\"",
+    "start": "node backend/server.js"
   },
   "keywords": [],
   "author": "",
